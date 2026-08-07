@@ -9,12 +9,42 @@ Ele faz a parte analitica inteira. Voce faz a parte manual (gravar, editar,
 postar). O agente diz **o que postar, em que formato, em que dia e horario** —
 sempre com o numero que sustenta a recomendacao.
 
+## 📱 Painel
+
+**<https://marcosgabrielpaes.github.io/social-agent/>**
+
+Instalavel: abra no celular e use *Compartilhar → Adicionar a Tela de Inicio*.
+Vira um app em tela cheia e continua abrindo sem rede.
+
+Atualiza sozinho **toda segunda as 8h** por GitHub Actions — nao depende de PC
+ligado nem de nenhum app aberto. Para rodar na hora, use o botao *Run workflow*
+na aba Actions, ou:
+
+```bash
+gh workflow run painel.yml
+```
+
 ## Como funciona
 
 ```
-coleta  ->  banco SQLite (historico)  ->  motor de metricas  ->  relatorio HTML
-                                                              -> resumo.json -> pauta da semana
+GitHub Actions (cron semanal)
+  -> coleta na API oficial da Meta
+  -> banco SQLite versionado no repo (o historico que o Instagram nao guarda)
+  -> motor de metricas
+  -> site/ publicado no GitHub Pages como PWA
+  -> briefing.md pronto para colar numa IA
 ```
+
+O banco fica **versionado de proposito**: sem ele, cada execucao na nuvem
+comecaria do zero e o historico se perderia.
+
+## Levar os dados para uma IA
+
+O painel tem um botao **Copiar briefing**. Ele copia um texto que ja carrega
+os numeros, a definicao de cada metrica no contexto, o que performou bem e mal,
+e o pedido de estrategia escrito. Cole em qualquer assistente e peca o plano.
+
+O mesmo texto fica em <https://marcosgabrielpaes.github.io/social-agent/briefing.md>.
 
 O banco importa porque o Instagram apaga o passado: varios recortes so mostram
 os ultimos dias. A cada coleta o agente carimba os numeros e monta a serie
