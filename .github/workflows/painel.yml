@@ -52,12 +52,18 @@ jobs:
         run: python construir_site.py
 
       - name: Guardar o historico coletado
+        # Nao pode derrubar a publicacao: se o commit do historico falhar, o
+        # painel ainda tem que ir ao ar com o dado recem-coletado.
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dados/social.db
-          git diff --staged --quiet || git commit -m "dados: coleta de $(date -u +%Y-%m-%d)"
-          git push
+          git diff --staged --quiet && echo "sem mudanca no historico" && exit 0
+          git commit -m "dados: coleta de $(date -u +%Y-%m-%d)"
+          # Alguem pode ter empurrado algo entre o checkout e agora.
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
