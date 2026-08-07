@@ -116,14 +116,11 @@ def main():
     janela = parametros["janela_analise_dias"]
     agora = datetime.now(FUSO)
 
-    desde = (agora - timedelta(days=janela)).isoformat()
-    desde_data = (agora - timedelta(days=janela)).date().isoformat()
-
     con = db.conectar()
+    janela, carga = db.carregar_janela(con, dados["perfis"], janela)
     analises = []
     for perfil in dados["perfis"]:
-        posts = db.posts_com_metricas(con, perfil["username"], desde)
-        snaps = db.snapshots(con, perfil["username"], desde_data)
+        posts, snaps = carga[perfil["username"]]
         analises.append(metricas.analisar_perfil(perfil, posts, snaps, parametros))
     con.close()
 

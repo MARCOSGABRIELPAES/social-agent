@@ -171,6 +171,34 @@ def posts_com_metricas(con, username, desde):
     return [dict(linha) for linha in cur.fetchall()]
 
 
+def carregar_janela(con, perfis, dias_preferidos):
+    """Carrega posts e snapshots, alargando a janela quando ela vem vazia.
+
+    Uma conta parada ha um ano nao pode gerar painel em branco: sem isso o
+    veredito diria "nenhum post publicado" para quem so esta em pausa, que e
+    um diagnostico completamente diferente. Comeca pela janela preferida e
+    so abre mais se nao houver nada para medir.
+    """
+    from datetime import datetime, timedelta, timezone
+
+    fuso = timezone(timedelta(hours=-3))
+    candidatas = sorted({dias_preferidos, 400, 1300})
+
+    for dias in candidatas:
+        marco = datetime.now(fuso) - timedelta(days=dias)
+        carga = {}
+        total = 0
+        for perfil in perfis:
+            posts = posts_com_metricas(con, perfil["username"], marco.isoformat())
+            snaps = snapshots(con, perfil["username"], marco.date().isoformat())
+            carga[perfil["username"]] = (posts, snaps)
+            total += len(posts)
+        if total:
+            return dias, carga
+
+    return dias_preferidos, carga
+
+
 def snapshots(con, username, desde):
     cur = con.execute(
         "SELECT * FROM snapshots_conta WHERE username = ? AND data >= ? ORDER BY data",

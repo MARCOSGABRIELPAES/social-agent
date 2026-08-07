@@ -1,5 +1,5 @@
 
-const CACHE = 'painel-202608071913';
+const CACHE = 'painel-202608071918';
 const ESSENCIAIS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (evento) => {

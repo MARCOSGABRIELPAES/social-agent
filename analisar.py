@@ -31,15 +31,12 @@ def main():
     if args.dias:
         parametros["janela_analise_dias"] = args.dias
 
-    janela = parametros["janela_analise_dias"]
-    desde = (datetime.now(FUSO) - timedelta(days=janela)).isoformat()
-    desde_data = (datetime.now(FUSO) - timedelta(days=janela)).date().isoformat()
-
     con = db.conectar()
+    janela, carga = db.carregar_janela(con, dados["perfis"],
+                                       parametros["janela_analise_dias"])
     analises, vazios = [], []
     for perfil in dados["perfis"]:
-        posts = db.posts_com_metricas(con, perfil["username"], desde)
-        snaps = db.snapshots(con, perfil["username"], desde_data)
+        posts, snaps = carga[perfil["username"]]
         if not posts and not snaps:
             vazios.append(perfil["username"])
             continue
