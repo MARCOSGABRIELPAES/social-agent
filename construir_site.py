@@ -36,9 +36,14 @@ MANIFEST = {
     ],
 }
 
-# Cache-first com revalidacao: abre instantaneo e offline, e troca pelo novo
-# assim que a rede responder. O nome do cache carrega a data da geracao, entao
-# cada publicacao invalida a anterior sozinha.
+# Duas estrategias, porque as duas metades da pagina tem exigencias opostas.
+#
+# O HTML vai por rede-primeiro: um painel semanal que abre com o dado da
+# semana passada e pior do que um que demora meio segundo. O cache so entra
+# quando a rede falha, para o app continuar abrindo no aviao ou no elevador.
+#
+# Icones e manifest vao por cache-primeiro: nunca mudam entre publicacoes e
+# nao ha ganho nenhum em rebusca-los.
 SERVICE_WORKER = """
 const CACHE = 'painel-{versao}';
 const ESSENCIAIS = ['./', './index.html', './manifest.json'];
@@ -58,19 +63,36 @@ self.addEventListener('activate', (evento) => {{
   );
 }});
 
+function ehDocumento(requisicao) {{
+  return requisicao.mode === 'navigate' ||
+    (requisicao.headers.get('accept') || '').includes('text/html');
+}}
+
 self.addEventListener('fetch', (evento) => {{
   if (evento.request.method !== 'GET') return;
+  const requisicao = evento.request;
+
+  if (ehDocumento(requisicao)) {{
+    evento.respondWith(
+      fetch(requisicao).then((resposta) => {{
+        const copia = resposta.clone();
+        caches.open(CACHE).then((c) => c.put('./index.html', copia));
+        return resposta;
+      }}).catch(() => caches.match('./index.html').then(
+        (guardado) => guardado || caches.match('./')))
+    );
+    return;
+  }}
+
   evento.respondWith(
-    caches.match(evento.request).then((guardado) => {{
-      const rede = fetch(evento.request).then((resposta) => {{
+    caches.match(requisicao).then((guardado) => guardado || fetch(requisicao).then(
+      (resposta) => {{
         if (resposta && resposta.status === 200) {{
           const copia = resposta.clone();
-          caches.open(CACHE).then((c) => c.put(evento.request, copia));
+          caches.open(CACHE).then((c) => c.put(requisicao, copia));
         }}
         return resposta;
-      }}).catch(() => guardado);
-      return guardado || rede;
-    }})
+      }}))
   );
 }});
 """

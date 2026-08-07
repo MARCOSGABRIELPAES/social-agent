@@ -1,5 +1,5 @@
 
-const CACHE = 'painel-202608071918';
+const CACHE = 'painel-202608071925';
 const ESSENCIAIS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (evento) => {
@@ -17,18 +17,35 @@ self.addEventListener('activate', (evento) => {
   );
 });
 
+function ehDocumento(requisicao) {
+  return requisicao.mode === 'navigate' ||
+    (requisicao.headers.get('accept') || '').includes('text/html');
+}
+
 self.addEventListener('fetch', (evento) => {
   if (evento.request.method !== 'GET') return;
+  const requisicao = evento.request;
+
+  if (ehDocumento(requisicao)) {
+    evento.respondWith(
+      fetch(requisicao).then((resposta) => {
+        const copia = resposta.clone();
+        caches.open(CACHE).then((c) => c.put('./index.html', copia));
+        return resposta;
+      }).catch(() => caches.match('./index.html').then(
+        (guardado) => guardado || caches.match('./')))
+    );
+    return;
+  }
+
   evento.respondWith(
-    caches.match(evento.request).then((guardado) => {
-      const rede = fetch(evento.request).then((resposta) => {
+    caches.match(requisicao).then((guardado) => guardado || fetch(requisicao).then(
+      (resposta) => {
         if (resposta && resposta.status === 200) {
           const copia = resposta.clone();
-          caches.open(CACHE).then((c) => c.put(evento.request, copia));
+          caches.open(CACHE).then((c) => c.put(requisicao, copia));
         }
         return resposta;
-      }).catch(() => guardado);
-      return guardado || rede;
-    })
+      }))
   );
 });
