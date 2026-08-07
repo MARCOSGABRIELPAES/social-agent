@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Painel de desempenho</title>
+<meta name="description" content="Metricas dos perfis @marcosgabriel_ia e @bombeiro_ia">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171A1F" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Painel">
+<link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+<link rel="icon" href="icones/favicon-32.png" sizes="32x32">
+<style>
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+</style>
+</head>
+<body>
+<style>
+:root {
+  --ground: #ECEEF1;      --surface: #F7F8FA;     --sunken: #E2E6EB;
+  --line: #D3D8DF;        --line-forte: #B9C1CB;
+  --ink: #171A1F;         --ink-medio: #454E5B;   --ink-suave: #6E7885;
+  --ancora: #0B6E7F;      --ancora-fraco: #D7EAED;
+  --brasa: #B45309;       --brasa-fraco: #F7E6CE;
+  --ok: #157F4C;          --atencao: #B45309;     --critico: #B42318;
+  --nivel-0: #E3E7EC; --nivel-1: #C3D8DC; --nivel-2: #8FBFC7;
+  --nivel-3: #4E9BA8; --nivel-4: #0B6E7F;
+  --sombra: 0 1px 2px rgba(23,26,31,.06), 0 4px 12px rgba(23,26,31,.04);
+  --prosa: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --medida: ui-monospace, "Cascadia Mono", "SF Mono", "Consolas", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #171A1F;    --surface: #1E232A;     --sunken: #12151A;
+    --line: #2C333C;      --line-forte: #3D4651;
+    --ink: #E8EBEF;       --ink-medio: #AEB7C2;   --ink-suave: #7C8794;
+    --ancora: #4FB3C4;    --ancora-fraco: #14333A;
+    --brasa: #E5A24A;     --brasa-fraco: #3A2C16;
+    --ok: #4CBE85;          --atencao: #E0913A;     --critico: #F0736A;
+    --nivel-0: #232931; --nivel-1: #1E3D45; --nivel-2: #2B5D69;
+    --nivel-3: #3C8595; --nivel-4: #4FB3C4;
+    --sombra: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #171A1F;      --surface: #1E232A;     --sunken: #12151A;
+  --line: #2C333C;        --line-forte: #3D4651;
+  --ink: #E8EBEF;         --ink-medio: #AEB7C2;   --ink-suave: #7C8794;
+  --ancora: #4FB3C4;      --ancora-fraco: #14333A;
+  --brasa: #E5A24A;       --brasa-fraco: #3A2C16;
+  --ok: #4CBE85;          --atencao: #E0913A;     --critico: #F0736A;
+  --nivel-0: #232931; --nivel-1: #1E3D45; --nivel-2: #2B5D69;
+  --nivel-3: #3C8595; --nivel-4: #4FB3C4;
+  --sombra: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.25);
+}
+:root[data-theme="light"] {
+  --ground: #ECEEF1;      --surface: #F7F8FA;     --sunken: #E2E6EB;
+  --line: #D3D8DF;        --line-forte: #B9C1CB;
+  --ink: #171A1F;         --ink-medio: #454E5B;   --ink-suave: #6E7885;
+  --ancora: #0B6E7F;      --ancora-fraco: #D7EAED;
+  --brasa: #B45309;       --brasa-fraco: #F7E6CE;
+  --ok: #157F4C;          --atencao: #B45309;     --critico: #B42318;
+  --nivel-0: #E3E7EC; --nivel-1: #C3D8DC; --nivel-2: #8FBFC7;
+  --nivel-3: #4E9BA8; --nivel-4: #0B6E7F;
+  --sombra: 0 1px 2px rgba(23,26,31,.06), 0 4px 12px rgba(23,26,31,.04);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: var(--prosa); font-size: 16px; line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+.folha { max-width: 720px; margin: 0 auto; padding: 20px 16px 72px; }
+
+/* --- cabecalho ---------------------------------------------------------- */
+.topo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+.topo h1 {
+  margin: 0; font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em;
+  text-wrap: balance;
+}
+.carimbo {
+  font-family: var(--medida); font-size: .7rem; color: var(--ink-suave);
+  text-transform: uppercase; letter-spacing: .09em;
+}
+
+/* --- abas de perfil ------------------------------------------------------ */
+.radio { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.abas {
+  display: flex; gap: 4px; padding: 4px; margin-bottom: 20px;
+  background: var(--sunken); border: 1px solid var(--line); border-radius: 10px;
+  position: sticky; top: 8px; z-index: 5;
+  backdrop-filter: blur(8px);
+}
+.abas label {
+  flex: 1; text-align: center; padding: 9px 8px; border-radius: 7px;
+  font-family: var(--medida); font-size: .76rem; letter-spacing: .01em;
+  color: var(--ink-suave); cursor: pointer; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  transition: background .15s ease, color .15s ease;
+}
+.abas label:hover { color: var(--ink-medio); }
+.paineis > section { display: none; }
+.radio:focus-visible + .abas label { outline: 2px solid var(--ancora); outline-offset: 2px; }
+
+/* --- veredito ------------------------------------------------------------ */
+.veredito {
+  display: grid; gap: 10px; padding: 18px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--sombra); margin-bottom: 16px;
+}
+.veredito .marca {
+  font-family: var(--medida); font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-suave);
+}
+.veredito .numero {
+  font-family: var(--medida); font-size: 2.6rem; line-height: 1;
+  font-weight: 600; letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+}
+.veredito .numero.alerta { color: var(--critico); }
+.veredito .numero.bom { color: var(--ok); }
+.veredito p { margin: 0; color: var(--ink-medio); font-size: .93rem; text-wrap: pretty; }
+
+/* --- kpis ---------------------------------------------------------------- */
+.kpis {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  margin-bottom: 22px;
+}
+@media (min-width: 560px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+.kpi {
+  padding: 13px 14px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.kpi .rotulo {
+  font-family: var(--medida); font-size: .64rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-suave);
+}
+.kpi .valor {
+  font-family: var(--medida); font-size: 1.5rem; font-weight: 600;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+}
+.kpi .nota { font-size: .72rem; color: var(--ink-suave); line-height: 1.35; }
+.kpi.destaque { border-color: var(--brasa); background: var(--brasa-fraco); }
+.kpi.destaque .valor { color: var(--brasa); }
+.kpi.abaixo .valor { color: var(--critico); }
+
+/* --- secoes -------------------------------------------------------------- */
+h2 {
+  font-family: var(--medida); font-size: .7rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-suave);
+  margin: 26px 0 10px; padding-bottom: 7px; border-bottom: 1px solid var(--line);
+}
+
+/* --- diagnosticos -------------------------------------------------------- */
+.achado {
+  display: grid; grid-template-columns: 3px 1fr; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--line);
+}
+.achado:last-child { border-bottom: 0; }
+.achado .risco { border-radius: 2px; background: var(--line-forte); }
+.achado.bom .risco { background: var(--ok); }
+.achado.acao .risco { background: var(--ancora); }
+.achado.atencao .risco { background: var(--atencao); }
+.achado.alerta .risco { background: var(--critico); }
+.achado .titulo { font-weight: 600; font-size: .93rem; margin-bottom: 2px; }
+.achado .detalhe { color: var(--ink-medio); font-size: .86rem; text-wrap: pretty; }
+
+/* --- barras de grupo ----------------------------------------------------- */
+.grupo { display: grid; gap: 3px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.grupo:last-child { border-bottom: 0; }
+.grupo .linha { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.grupo .nome { font-size: .9rem; font-weight: 550; }
+.grupo .indice {
+  font-family: var(--medida); font-size: .95rem; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: var(--ink-medio);
+}
+.grupo.acima .indice { color: var(--brasa); }
+.trilho { height: 6px; background: var(--sunken); border-radius: 3px; overflow: hidden; }
+.trilho span { display: block; height: 100%; background: var(--ancora); border-radius: 3px; }
+.grupo.acima .trilho span { background: var(--brasa); }
+.grupo .meta {
+  font-family: var(--medida); font-size: .68rem; color: var(--ink-suave);
+  letter-spacing: .04em;
+}
+
+/* --- mapa de horarios ---------------------------------------------------- */
+.rolagem { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+.mapa {
+  display: grid; grid-template-columns: 40px repeat(6, minmax(46px, 1fr));
+  gap: 3px; min-width: 340px;
+}
+.mapa .cab, .mapa .lin {
+  font-family: var(--medida); font-size: .6rem; letter-spacing: .06em;
+  color: var(--ink-suave); display: flex; align-items: center;
+}
+.mapa .cab { justify-content: center; padding-bottom: 3px; }
+.mapa .lin { justify-content: flex-end; padding-right: 6px; }
+.cel {
+  aspect-ratio: 1.5; border-radius: 5px; display: flex;
+  align-items: center; justify-content: center;
+  font-family: var(--medida); font-size: .66rem; font-variant-numeric: tabular-nums;
+  background: var(--nivel-0); color: var(--ink-suave);
+}
+.cel.n1 { background: var(--nivel-1); color: var(--ink); }
+.cel.n2 { background: var(--nivel-2); color: #0C2126; }
+.cel.n3 { background: var(--nivel-3); color: #fff; }
+.cel.n4 { background: var(--nivel-4); color: #fff; font-weight: 600; }
+
+/* --- posts --------------------------------------------------------------- */
+.post {
+  display: grid; gap: 7px; padding: 13px 0; border-bottom: 1px solid var(--line);
+}
+.post:last-child { border-bottom: 0; }
+.post .cabeca { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.selo {
+  font-family: var(--medida); font-size: .62rem; letter-spacing: .07em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
+  background: var(--sunken); color: var(--ink-suave); border: 1px solid var(--line);
+}
+.selo.pilar { background: var(--ancora-fraco); color: var(--ancora); border-color: transparent; }
+.post .gancho { font-size: .92rem; line-height: 1.4; text-wrap: pretty; }
+.post .gancho a { color: inherit; text-decoration-color: var(--line-forte); text-underline-offset: 3px; }
+.post .gancho a:hover { text-decoration-color: var(--ancora); }
+.post .numeros {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-family: var(--medida); font-size: .7rem; color: var(--ink-suave);
+  font-variant-numeric: tabular-nums;
+}
+.post .numeros b { color: var(--ink-medio); font-weight: 600; }
+.post.campeao .numeros b.ind { color: var(--brasa); }
+
+/* --- exportar ------------------------------------------------------------ */
+.exportar {
+  margin-top: 34px; padding: 18px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--line); box-shadow: var(--sombra);
+  display: grid; gap: 12px;
+}
+.exportar h3 {
+  margin: 0; font-family: var(--medida); font-size: .7rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-suave);
+}
+.exportar p { margin: 0; font-size: .87rem; color: var(--ink-medio); text-wrap: pretty; }
+.botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.botoes button, .botoes a {
+  flex: 1 1 auto; min-height: 44px; padding: 11px 16px; border-radius: 9px;
+  font-family: var(--medida); font-size: .78rem; letter-spacing: .04em;
+  cursor: pointer; border: 1px solid var(--line-forte); background: var(--ground);
+  color: var(--ink); text-align: center; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s ease, border-color .15s ease;
+}
+.botoes button.principal { background: var(--ancora); border-color: var(--ancora); color: #fff; }
+.botoes button.principal.feito { background: var(--ok); border-color: var(--ok); }
+.botoes button:hover, .botoes a:hover { border-color: var(--ancora); }
+.botoes button:focus-visible, .botoes a:focus-visible {
+  outline: 2px solid var(--ancora); outline-offset: 2px;
+}
+
+/* --- vazio / rodape ------------------------------------------------------ */
+.vazio {
+  padding: 22px 18px; border: 1px dashed var(--line-forte); border-radius: 10px;
+  color: var(--ink-medio); font-size: .9rem; text-wrap: pretty;
+}
+.cruzado { display: grid; gap: 7px; margin-bottom: 20px; padding: 16px 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.cruzado p { margin: 0; font-size: .88rem; color: var(--ink-medio); text-wrap: pretty; }
+footer {
+  margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-size: .76rem; color: var(--ink-suave); line-height: 1.55;
+}
+footer b { color: var(--ink-medio); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+#perfil0:checked ~ .paineis > #painel0 { display: block; }
+#perfil0:checked ~ .abas label[for="perfil0"] { background: var(--surface); color: var(--ink); box-shadow: var(--sombra); }
+#perfil1:checked ~ .paineis > #painel1 { display: block; }
+#perfil1:checked ~ .abas label[for="perfil1"] { background: var(--surface); color: var(--ink); box-shadow: var(--sombra); }</style><div class="folha"><div class="topo"><h1>Painel de desempenho</h1><div class="carimbo">07/08/2026 19:13 &middot; janela 90 dias &middot; medianas</div></div><input class="radio" type="radio" name="perfil" id="perfil0" checked><input class="radio" type="radio" name="perfil" id="perfil1"><div class="abas"><label for="perfil0">@marcosgabriel_ia</label><label for="perfil1">@bombeiro_ia</label></div><div class="paineis"><section id="painel0"><div class="veredito"><div class="marca">Estado da conta</div><div class="numero alerta">0</div><p>Nenhum post publicado. Nao ha desempenho a medir aqui &mdash; o que falta neste perfil e conteudo, nao analise.</p></div><div class="kpis"><div class="kpi "><div class="rotulo">Seguidores</div><div class="valor">1.032</div><div class="nota">primeira medicao</div></div><div class="kpi "><div class="rotulo">Alcance tipico</div><div class="valor">0</div><div class="nota">mediana por post</div></div><div class="kpi "><div class="rotulo">Posts medidos</div><div class="valor">0</div><div class="nota">na janela analisada</div></div><div class="kpi "><div class="rotulo">Engajamento</div><div class="valor">—</div><div class="nota">ref. 4.5%</div></div><div class="kpi "><div class="rotulo">Salvamento</div><div class="valor">—</div><div class="nota">ref. 1.20%</div></div><div class="kpi "><div class="rotulo">Compartilham.</div><div class="valor">—</div><div class="nota">ref. 0.80%</div></div></div></section><section id="painel1"><div class="veredito"><div class="marca">Estado da conta</div><div class="numero alerta">0</div><p>Nenhum post publicado. Nao ha desempenho a medir aqui &mdash; o que falta neste perfil e conteudo, nao analise.</p></div><div class="kpis"><div class="kpi "><div class="rotulo">Seguidores</div><div class="valor">0</div><div class="nota">primeira medicao</div></div><div class="kpi "><div class="rotulo">Alcance tipico</div><div class="valor">0</div><div class="nota">mediana por post</div></div><div class="kpi "><div class="rotulo">Posts medidos</div><div class="valor">0</div><div class="nota">na janela analisada</div></div><div class="kpi "><div class="rotulo">Engajamento</div><div class="valor">—</div><div class="nota">ref. 4.5%</div></div><div class="kpi "><div class="rotulo">Salvamento</div><div class="valor">—</div><div class="nota">ref. 1.20%</div></div><div class="kpi "><div class="rotulo">Compartilham.</div><div class="valor">—</div><div class="nota">ref. 0.80%</div></div></div></section></div><div class="exportar"><h3>Levar para uma IA</h3><p>Copia um briefing completo &mdash; numeros, definicao de cada metrica, o que ja performou bem e mal, e o pedido de estrategia ja escrito. Cole no ChatGPT, no Claude ou em qualquer assistente e peca o plano.</p><div class="botoes"><button type="button" id="copiar" class="principal">Copiar briefing</button><button type="button" id="baixar">Baixar .md</button></div><div id="briefing" hidden># Briefing de desempenho no Instagram
+
+Gerado em 07/08/2026. Janela de analise: 90 dias.
+
+## Como ler estes numeros
+
+- **Engajamento** e interacoes dividido por **alcance**, nao por seguidores. Mede a qualidade do post, nao o tamanho da conta.
+- **Indice de alcance** compara o perfil com ele mesmo: 1.0x e o alcance tipico dele, 2.0x e o dobro. Nao compara com outras contas.
+- Tudo usa **mediana**, nao media: um unico viral distorce a media e faz o perfil parecer melhor do que entrega toda semana.
+- **Salvamento** e hoje o sinal que mais expande alcance no Instagram; **compartilhamento** e o que traz publico novo.
+
+## @marcosgabriel_ia — Gabriel Paes
+
+- Papel: pessoal | Objetivo declarado: autoridade
+- Perfil pessoal do fundador. Bio: &#x27;Transformo trabalho manual em lucro com IA&#x27;. E o unico ativo com audiencia (1.030 seguidores em 07/08/2026) e por isso e o motor de trafego para o @bombeiro_ia.
+
+**Este perfil nao tem nenhum post publicado.** Nao existe metrica a analisar. O que falta aqui e conteudo, nao diagnostico.
+
+## @bombeiro_ia — Bombeiro IA
+
+- Papel: especializado | Objetivo declarado: conversao
+- Produto B2B: agente de IA de recepcao para clinicas odontologicas. Responde em ate 60s, qualifica o lead e entrega para a recepcao humana com contexto. R$697/mes ou R$3.000 por 6 meses. Perfil zerado em 07/08/2026 (0 posts, 0 seguidores).
+
+**Este perfil nao tem nenhum post publicado.** Nao existe metrica a analisar. O que falta aqui e conteudo, nao diagnostico.
+
+## O que eu quero de voce
+
+Analise os dados acima e proponha uma estrategia de conteudo para as proximas 4 semanas. Requisitos:
+
+1. Comece apontando o **gargalo real** — o que trava o crescimento hoje. Se for falta de publicacao e nao qualidade de conteudo, diga isso com todas as letras em vez de sugerir otimizacao fina.
+2. Toda recomendacao precisa citar o **numero especifico** que a sustenta. Recomendacao sem dado por tras e chute.
+3. Proponha uma grade semanal concreta: quantos posts, em que formato, de que pilar, em que dia e horario.
+4. Para cada post, escreva o **gancho** (primeira linha) e o CTA.
+5. Diga explicitamente o que **nao** fazer, com base no que ja performou mal.
+6. Se algum dado for insuficiente para uma conclusao, aponte a lacuna em vez de preencher com suposicao.
+</div></div><script>(function () {
+  var fonte = document.getElementById('briefing');
+  var copiar = document.getElementById('copiar');
+  var baixar = document.getElementById('baixar');
+  function texto() { return fonte.textContent; }
+  copiar.addEventListener('click', function () {
+    var alvo = texto();
+    var fim = function (ok) {
+      copiar.textContent = ok ? 'Copiado' : 'Selecione e copie';
+      copiar.classList.toggle('feito', ok);
+      setTimeout(function () {
+        copiar.textContent = 'Copiar briefing';
+        copiar.classList.remove('feito');
+      }, 2200);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(alvo).then(function () { fim(true); },
+        function () { fim(false); });
+    } else {
+      var caixa = document.createElement('textarea');
+      caixa.value = alvo; caixa.style.position = 'fixed';
+      caixa.style.opacity = '0'; document.body.appendChild(caixa);
+      caixa.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (erro) { ok = false; }
+      document.body.removeChild(caixa); fim(ok);
+    }
+  });
+  baixar.addEventListener('click', function () {
+    var blob = new Blob([texto()], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'briefing-instagram.md';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  });
+})();</script><footer><b>Indice de alcance</b> compara voce com voce: 1.0x e o alcance tipico do proprio perfil, 2.0x e o dobro dele. <b>Engajamento</b> divide interacoes por alcance, nao por seguidores &mdash; e o que mede a qualidade do post em vez do tamanho da conta. Tudo usa <b>mediana</b>: um unico viral distorce a media e faz o perfil parecer melhor do que entrega toda semana. Ambar marca o que supera a linha de base.<br><br>Dados da API oficial da Meta. Gerado por social-agent.</footer></div>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

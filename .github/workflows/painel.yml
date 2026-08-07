@@ -1,0 +1,75 @@
+name: painel
+
+on:
+  schedule:
+    # 11:00 UTC = 08:00 em Brasilia. Segunda-feira.
+    - cron: "0 11 * * 1"
+  workflow_dispatch:        # botao "Run workflow" para rodar na hora
+  push:
+    branches: [main]
+    paths-ignore:
+      - "dados/social.db"   # evita loop: o proprio job commita esse arquivo
+
+permissions:
+  contents: write           # para versionar o historico coletado
+  pages: write
+  id-token: write
+
+concurrency:
+  group: painel
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Coletar da API do Instagram
+        id: coletar
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        # Token vencido nao pode derrubar a publicacao: o painel continua no ar
+        # com o ultimo historico e o passo seguinte registra o aviso.
+        continue-on-error: true
+        run: python coletar.py --dias 400
+
+      - name: Avisar se a coleta falhou
+        if: steps.coletar.outcome == 'failure'
+        run: echo "::warning::A coleta falhou. O painel foi publicado com o historico anterior. Verifique se o IG_ACCESS_TOKEN expirou."
+
+      - name: Analisar
+        run: python analisar.py
+
+      - name: Montar o site
+        run: python construir_site.py
+
+      - name: Guardar o historico coletado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados/social.db
+          git diff --staged --quiet || git commit -m "dados: coleta de $(date -u +%Y-%m-%d)"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  publicar:
+    needs: atualizar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

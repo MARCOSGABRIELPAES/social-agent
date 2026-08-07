@@ -1,0 +1,14 @@
+# O token NUNCA vai para o repositorio. Na nuvem ele vive como secret do
+# GitHub Actions (Settings > Secrets and variables > Actions).
+.env
+
+# Gerados localmente. O que vai para o ar e a pasta site/, montada pelo workflow.
+relatorios/
+dados/*.csv
+dados/resumo.json
+
+__pycache__/
+*.pyc
+
+# dados/social.db FICA versionado de proposito: e o historico que o Instagram
+# nao guarda. Sem ele, cada execucao na nuvem comecaria do zero.

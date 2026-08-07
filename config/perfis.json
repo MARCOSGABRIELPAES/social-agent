@@ -1,0 +1,268 @@
+{
+  "_leia_me": "Pilares calibrados em 07/08/2026 a partir das bios, dos destaques e dos sites bombeiro-ia.vercel.app e marcosgabrielpaes.vercel.app. As palavras-chave classificam cada post pela legenda - ajuste conforme o vocabulario que voce realmente usa.",
+  "_paginas_fb": "IDs das Paginas do Facebook ligadas as contas. Servem de reserva: quando a Pagina esta em Portfolio Empresarial, /me/accounts volta vazia sem business_management, mas o acesso pelo ID direto continua funcionando.",
+  "paginas_fb": [
+    "1197554370118801"
+  ],
+  "perfis": [
+    {
+      "username": "marcosgabriel_ia",
+      "ig_user_id": "17841400948064794",
+      "nome": "Gabriel Paes",
+      "papel": "pessoal",
+      "url": "https://www.instagram.com/marcosgabriel_ia/",
+      "objetivo": "autoridade",
+      "meta_principal": "seguidores_ganhos",
+      "descricao": "Perfil pessoal do fundador. Bio: 'Transformo trabalho manual em lucro com IA'. E o unico ativo com audiencia (1.030 seguidores em 07/08/2026) e por isso e o motor de trafego para o @bombeiro_ia.",
+      "pilares": [
+        {
+          "nome": "manual_para_lucro",
+          "descricao": "A tese central: tarefa manual que virou processo automatizado e lucro",
+          "palavras_chave": [
+            "trabalho manual",
+            "manual",
+            "automatiza",
+            "automacao",
+            "processo",
+            "planilha",
+            "repetitivo",
+            "lucro",
+            "economiza",
+            "horas",
+            "produtividade",
+            "fluxo",
+            "sistema"
+          ]
+        },
+        {
+          "nome": "bastidor_fundador",
+          "descricao": "Construcao do bombeiro_ia e do negocio na frente das pessoas",
+          "palavras_chave": [
+            "bastidor",
+            "construindo",
+            "criei",
+            "lancei",
+            "errei",
+            "aprendi",
+            "primeiro cliente",
+            "validando",
+            "mvp",
+            "por tras",
+            "jornada",
+            "do zero",
+            "empreender",
+            "diario"
+          ]
+        },
+        {
+          "nome": "ensino",
+          "descricao": "Tutorial, ferramenta, prompt, comparativo",
+          "palavras_chave": [
+            "como fazer",
+            "passo a passo",
+            "tutorial",
+            "ferramenta",
+            "prompt",
+            "dica",
+            "guia",
+            "aprenda",
+            "voce sabia",
+            "n8n",
+            "agente",
+            "chatgpt",
+            "claude",
+            "api",
+            "integra"
+          ]
+        },
+        {
+          "nome": "prova",
+          "descricao": "Case, numero, antes e depois, depoimento",
+          "palavras_chave": [
+            "resultado",
+            "case",
+            "antes e depois",
+            "cliente",
+            "faturamento",
+            "numeros",
+            "entreguei",
+            "depoimento",
+            "conversao",
+            "roi",
+            "fechei"
+          ]
+        },
+        {
+          "nome": "vida",
+          "descricao": "Jiu-jitsu, parkour, viagens e relacionamento - o que humaniza a autoridade",
+          "palavras_chave": [
+            "jiu-jitsu",
+            "jiu jitsu",
+            "jiujitsu",
+            "treino",
+            "tatame",
+            "faixa",
+            "parkour",
+            "viagem",
+            "canada",
+            "toronto",
+            "barrie",
+            "ottawa",
+            "quebec",
+            "new york",
+            "boston",
+            "esposa",
+            "noiva",
+            "casamento",
+            "familia",
+            "rotina",
+            "disciplina"
+          ]
+        },
+        {
+          "nome": "opiniao",
+          "descricao": "Posicionamento de mercado sobre IA",
+          "palavras_chave": [
+            "opiniao",
+            "na minha visao",
+            "acho que",
+            "impopular",
+            "verdade sobre",
+            "ninguem fala",
+            "mercado",
+            "hype",
+            "bolha",
+            "futuro",
+            "vai substituir"
+          ]
+        }
+      ]
+    },
+    {
+      "username": "bombeiro_ia",
+      "ig_user_id": null,
+      "nome": "Bombeiro IA",
+      "papel": "especializado",
+      "url": "https://www.instagram.com/bombeiro_ia/",
+      "objetivo": "conversao",
+      "meta_principal": "visitas_perfil",
+      "descricao": "Produto B2B: agente de IA de recepcao para clinicas odontologicas. Responde em ate 60s, qualifica o lead e entrega para a recepcao humana com contexto. R$697/mes ou R$3.000 por 6 meses. Perfil zerado em 07/08/2026 (0 posts, 0 seguidores).",
+      "pilares": [
+        {
+          "nome": "dor_recepcao",
+          "descricao": "O problema do cliente: lead que esfria enquanto a recepcao esta ocupada",
+          "palavras_chave": [
+            "lead",
+            "esfria",
+            "esfriar",
+            "perdeu",
+            "perdendo",
+            "demora",
+            "sem resposta",
+            "nao respondeu",
+            "recepcao",
+            "recepcionista",
+            "whatsapp parado",
+            "fila",
+            "ocupada",
+            "sumiu",
+            "deixou no vacuo",
+            "concorrente"
+          ]
+        },
+        {
+          "nome": "produto",
+          "descricao": "Como o agente funciona: 60 segundos, qualificacao, contexto, handoff",
+          "palavras_chave": [
+            "agente",
+            "60 segundos",
+            "responde na hora",
+            "qualifica",
+            "qualificacao",
+            "contexto",
+            "handoff",
+            "assume",
+            "status",
+            "pipeline",
+            "integra",
+            "whatsapp",
+            "crm",
+            "agenda",
+            "funciona assim",
+            "demonstracao",
+            "demo"
+          ]
+        },
+        {
+          "nome": "gestao_clinica",
+          "descricao": "Rotina e numeros de quem toca clinica odontologica",
+          "palavras_chave": [
+            "clinica",
+            "dentista",
+            "odonto",
+            "odontologic",
+            "paciente",
+            "agendamento",
+            "no-show",
+            "falta",
+            "cadeira",
+            "consultorio",
+            "orcamento",
+            "avaliacao",
+            "taxa de conversao",
+            "faturamento",
+            "ticket",
+            "secretaria"
+          ]
+        },
+        {
+          "nome": "prova",
+          "descricao": "Case real, print de conversa, numero de antes e depois",
+          "palavras_chave": [
+            "case",
+            "resultado",
+            "antes e depois",
+            "print",
+            "conversa real",
+            "depoimento",
+            "cliente",
+            "aumentou",
+            "recuperou",
+            "fechou",
+            "em 30 dias",
+            "numeros"
+          ]
+        },
+        {
+          "nome": "educacao_ia",
+          "descricao": "Desfazer objecao e explicar o que e um agente de IA de verdade",
+          "palavras_chave": [
+            "chatbot",
+            "robotizado",
+            "robo",
+            "mito",
+            "objecao",
+            "medo",
+            "vai parecer robo",
+            "diferenca entre",
+            "o que e",
+            "nao e",
+            "inteligencia artificial",
+            "humanizado",
+            "lgpd",
+            "seguranca"
+          ]
+        }
+      ]
+    }
+  ],
+  "parametros": {
+    "janela_analise_dias": 90,
+    "janela_semana_dias": 7,
+    "min_posts_para_heatmap": 15,
+    "fuso": "America/Sao_Paulo",
+    "benchmark_taxa_engajamento": 0.045,
+    "benchmark_taxa_salvamento": 0.012,
+    "benchmark_taxa_compartilhamento": 0.008
+  }
+}
