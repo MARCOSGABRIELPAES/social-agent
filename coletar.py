@@ -2,7 +2,7 @@
 
     py coletar.py                 # ultimos 90 dias das duas contas
     py coletar.py --dias 30
-    py coletar.py --perfil bombeiro_ia
+    py coletar.py --perfil marcosgabriel.ia
     py coletar.py --descobrir     # so preenche os ig_user_id no config
 
 Funciona com as duas variantes da API (login do Facebook ou login do

@@ -1,9 +1,9 @@
 """MODO MANUAL: importa um CSV quando ainda nao ha token da API.
 
     py importar.py --modelo                          # cria o CSV de exemplo
-    py importar.py dados/meus_posts.csv --perfil bombeiro_ia
+    py importar.py dados/meus_posts.csv --perfil marcosgabriel.ia
     py importar.py export_metricool.csv              # detecta as colunas sozinho
-    py importar.py --seguidores bombeiro_ia=1240     # so atualiza o total
+    py importar.py --seguidores marcosgabriel.ia=1240   # so atualiza o total
 
 Aceita o export do Metricool, do Later e o modelo proprio. As colunas sao
 reconhecidas por apelido, entao a ordem e o nome exato nao importam.
@@ -45,8 +45,8 @@ APELIDOS = {
 }
 
 MODELO = """publicado_em,perfil,tipo,legenda,alcance,views,curtidas,comentarios,salvamentos,compartilhamentos,link
-2026-08-04 20:00,bombeiro_ia,REELS,"3 erros de AVCB que interditam a obra",4200,6100,310,24,88,41,https://instagram.com/p/exemplo1
-2026-08-05 12:30,marcosgabriel_ia,FEED,"O que aprendi automatizando laudo tecnico com IA",1850,2100,140,19,52,12,https://instagram.com/p/exemplo2
+2026-08-04 20:00,marcosgabriel.ia,REELS,"Essa planilha te custa 6h por semana e voce nem percebe",4200,6100,310,24,88,41,https://instagram.com/p/exemplo1
+2026-08-05 12:30,marcosgabriel.ia,FEED,"O que aprendi automatizando laudo tecnico com IA",1850,2100,140,19,52,12,https://instagram.com/p/exemplo2
 """
 
 

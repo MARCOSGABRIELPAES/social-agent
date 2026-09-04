@@ -1,9 +1,7 @@
 # social-agent
 
-Agente de metricas e analise para dois perfis do Instagram:
-
-- **@marcosgabriel_ia** — pessoal / fundador, meta de autoridade
-- **@bombeiro_ia** — especializado, meta de conversao
+Agente de metricas e analise para o perfil do Instagram **@marcosgabriel.ia**
+— pessoal / fundador, meta de autoridade.
 
 Ele faz a parte analitica inteira. Voce faz a parte manual (gravar, editar,
 postar). O agente diz **o que postar, em que formato, em que dia e horario** —
@@ -61,7 +59,7 @@ py -3.13 -m pip install -r requirements.txt
 ```bash
 py -3.13 importar.py --modelo                    # cria dados/modelo_import.csv
 py -3.13 importar.py dados/modelo_import.csv     # importa
-py -3.13 importar.py --seguidores bombeiro_ia=4820 marcosgabriel_ia=1960
+py -3.13 importar.py --seguidores marcosgabriel.ia=1960
 py -3.13 analisar.py --abrir
 ```
 
@@ -71,8 +69,8 @@ as colunas sao reconhecidas por apelido, entao nome e ordem nao importam.
 ### Modo automatico (a partir do token da Meta)
 
 ```bash
-py -3.13 coletar.py --descobrir    # preenche os ig_user_id sozinho
-py -3.13 coletar.py                # puxa 90 dias das duas contas
+py -3.13 coletar.py --descobrir    # preenche o ig_user_id sozinho
+py -3.13 coletar.py                # puxa 90 dias da conta
 py -3.13 analisar.py
 ```
 
@@ -90,9 +88,9 @@ Roda o ciclo inteiro e ainda escreve a pauta da proxima semana em
 So a API oficial da Meta e usada. Nada de login com senha ou scraping — e
 exatamente isso que separa coleta legitima de automacao que derruba a conta.
 
-1. As duas contas precisam ser **Profissional** (Business ou Creator):
+1. A conta precisa ser **Profissional** (Business ou Creator):
    Instagram > Configuracoes > Tipo de conta.
-2. Vincule cada uma a uma **Pagina do Facebook** (pode ser uma pagina vazia,
+2. Vincule a uma **Pagina do Facebook** (pode ser uma pagina vazia,
    criada so para isso): Instagram > Configuracoes > Central de Contas.
 3. Crie um app em <https://developers.facebook.com/apps> do tipo **Business**.
 4. Adicione o produto **Instagram Graph API**.

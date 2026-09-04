@@ -1,7 +1,7 @@
 {
   "name": "Painel de desempenho",
   "short_name": "Painel",
-  "description": "Metricas dos perfis @marcosgabriel_ia e @bombeiro_ia",
+  "description": "Metricas do perfil @marcosgabriel.ia",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

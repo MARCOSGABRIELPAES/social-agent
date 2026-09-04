@@ -20,7 +20,7 @@ SITE = RAIZ / "site"
 MANIFEST = {
     "name": "Painel de desempenho",
     "short_name": "Painel",
-    "description": "Metricas dos perfis @marcosgabriel_ia e @bombeiro_ia",
+    "description": "Metricas do perfil @marcosgabriel.ia",
     "start_url": "./",
     "scope": "./",
     "display": "standalone",
@@ -103,7 +103,7 @@ CABECA = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Painel de desempenho</title>
-<meta name="description" content="Metricas dos perfis @marcosgabriel_ia e @bombeiro_ia">
+<meta name="description" content="Metricas do perfil @marcosgabriel.ia">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#171A1F" media="(prefers-color-scheme: dark)">
